@@ -1,0 +1,46 @@
+esphome:
+  name: diy-xiao-c6-dht22-sensor
+  name_add_mac_suffix: true
+  friendly_name: DIY Xiao C6 DHT22 Sensor
+
+packages:
+  - !include common/base.yaml
+  - !include common/wifi.yaml
+  - !include boards/esp32-xiao-c6.yaml
+
+sensor:
+  - platform: dht
+    pin:
+      number: GPIO21
+      mode:
+        input: true
+        # My DHT22 module has a built-in pull-up resistor, so I disable the internal pull-up
+        pullup: false
+    model: DHT22_TYPE2
+    temperature:
+      name: "Temperature"
+    humidity:
+      name: "Humidity"
+    update_interval: 60s
+
+text_sensor:
+  - platform: template
+    name: Sensor Module
+    id: temp_sensor_module_model
+    icon: "mdi:thermometer"
+    entity_category: "diagnostic"
+    lambda: |-
+      return {"DHT22"};
+    update_interval: 60s
+
+  - platform: template
+    name: Microcontroller
+    id: temp_sensor_mcu_model
+    icon: "mdi:chip"
+    entity_category: "diagnostic"
+    lambda: |-
+      return {"ESP32 Xiao C6"};
+    update_interval: 24h
+
+# References
+# https://tutoduino.fr/en/esp32c6-temperature-esphome/

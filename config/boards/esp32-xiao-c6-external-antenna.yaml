@@ -1,0 +1,15 @@
+# Include this file if an external antenna is used with the ESP32 Xiao C6. This will configure the RF switch and antenna select pins accordingly.
+switch:
+  - platform: gpio
+    pin: GPIO3
+    id: rf_switch
+    name: "RF Switch"
+    internal: true    
+    restore_mode: ALWAYS_OFF
+
+  - platform: gpio
+    pin: GPIO14
+    id: antenna_select
+    name: "Antenna Select"
+    internal: true    
+    restore_mode: ALWAYS_ON # Uses external antenna

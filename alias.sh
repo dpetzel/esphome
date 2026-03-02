@@ -1,0 +1,1 @@
+alias esphome='docker run --privileged --rm -v "${PWD}/config":/config --device=/dev/ttyACM0 -it ghcr.io/esphome/esphome'

@@ -1,0 +1,25 @@
+esp32:
+  board: seeed_xiao_esp32c6
+  framework:
+    type: esp-idf
+
+i2c:
+  sda: GPIO22
+  scl: GPIO23
+  scan: False
+
+sensor:
+  - platform: adc
+    pin: GPIO0
+    name: "Battery Voltage"
+    id: battery_voltage
+    # update_interval: never
+    attenuation: 12db  # For ADC inputs > 1.1V (extends range to ~2.45V)
+    filters:
+      - multiply: 2.0  # Voltage divider (div 2) compensation
+
+
+# References
+# https://wiki.seeedstudio.com/xiao_esp32c6_getting_started/
+# https://github.com/DerekSeaman/ESPHome-Seeed-Xiao-ESP32-C6-Config/tree/main
+# https://www.xda-developers.com/built-zigbee-motion-sensor-esp32-c6/
