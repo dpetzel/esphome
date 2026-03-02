@@ -33,7 +33,7 @@ My collection of ESPHome configurations
 
 
 ## WSL Stuff
-This is only relevant if you are attempting to run espnhome on Windows via WSL
+This is only relevant if you are attempting to run esphome on Windows via WSL
 
 Need to pass through the USB device.
 Install usbipd - https://github.com/dorssel/usbipd-win
