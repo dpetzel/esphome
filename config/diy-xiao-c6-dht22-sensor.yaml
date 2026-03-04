@@ -1,7 +1,11 @@
-esphome:
+substitutions:
   name: diy-xiao-c6-dht22-sensor
-  name_add_mac_suffix: true
   friendly_name: DIY Xiao C6 DHT22 Sensor
+
+esphome:
+  name: "${name}"
+  name_add_mac_suffix: true
+  friendly_name: "${friendly_name}"
 
 packages:
   - !include common/base.yaml

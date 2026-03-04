@@ -1,11 +1,7 @@
 wifi:
-  ssid: !secret wifi_ssid
-  password: !secret wifi_password
-  fast_connect: true
-
   # Enable fallback hotspot (captive portal) in case wifi connection fails
   ap:
-    ssid: "ESPHome-Device-Fallback"
+    ssid: "${friendly_name}"
     password: !secret wifi_fallback_ap_password
 
 captive_portal:
