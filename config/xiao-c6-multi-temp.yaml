@@ -1,0 +1,122 @@
+# This configuration is for a Frankenstien setup used for comparing multiple temperature sensors.
+# It is not intended to be a deployed sensor.
+#
+# Components:
+# - DHT11 temperature and humidity sensor
+# - DHT22 temperature and humidity sensor
+# - DHT20 temperature sensor
+# - MCP9808 temperature sensor
+# - SHT41 temperature sensor
+# - ESP32 Xiao C6 microcontroller
+#
+# Pinout:
+# All I2C sensors are on their default I2C addresses, 
+# SDA is on GPIO22, SCL is on GPIO23.
+# 
+# DHT22 is attached to GPIO21 no external resistor.
+# DHT11 is attached to GPIO2 no external resistor.
+#
+# In addition to the sensors mentions above this setup has a SSD1306 OLED display attached to the I2C bus for displaying the sensor readings.
+# We want a "grid" style output where each line is one sensor. The line should identify the senors, its temp reading, and its humidity reading if it has one. 
+# The display should update when the sensors are read. The OLED is a two color, with the top yellow and bottom blue. Keep all the sensor in the blue section.
+
+substitutions:
+  name: xiao-c6-multi-temp
+  friendly_name: Xiao C6 Multi Temp
+
+esphome:
+  name: "${name}"
+  name_add_mac_suffix: true
+  friendly_name: "${friendly_name}"
+
+packages:
+  - !include common/base.yaml
+  - !include common/wifi.yaml
+  - !include boards/esp32-xiao-c6.yaml
+
+sensor:
+  - platform: dht
+    pin:
+      number: GPIO21
+      mode:
+        input: true
+        pullup: true
+    model: DHT22_TYPE2
+    temperature:
+      name: "DHT22 Temperature"
+      id: dht22_temp
+      on_value:
+        then:
+          - component.update: oled_display
+    humidity:
+      name: "DHT22 Humidity"
+      id: dht22_hum
+    update_interval: 60s
+
+  - platform: dht
+    pin:
+      number: GPIO2
+      mode:
+        input: true
+        pullup: true
+    model: DHT11
+    temperature:
+      name: "DHT11 Temperature"
+      id: dht11_temp
+    humidity:
+      name: "DHT11 Humidity"
+      id: dht11_hum
+    update_interval: 60s
+
+  - platform: aht10
+    variant: AHT20
+    address: 0x38
+    temperature:
+      name: "DHT20 Temperature"
+      id: dht20_temp
+      on_value:
+        then:
+          - component.update: oled_display
+    humidity:
+      name: "DHT20 Humidity"
+      id: dht20_hum
+    update_interval: 60s
+
+  - platform: mcp9808
+    address: 0x18
+    name: "MCP9808 Temperature"
+    id: mcp9808_temp
+    on_value:
+      then:
+        - component.update: oled_display
+    update_interval: 60s
+
+  - platform: sht4x
+    address: 0x44
+    temperature:
+      name: "SHT41 Temperature"
+      id: sht41_temp
+      on_value:
+        then:
+          - component.update: oled_display
+    humidity:
+      name: "SHT41 Humidity"
+      id: sht41_hum
+    update_interval: 60s
+
+display:
+  - platform: ssd1306_i2c
+    model: "SSD1306 128x64"
+    address: 0x3C
+    id: oled_display
+    lambda: |-
+      it.printf(0, 17, id(display_font), "DHT22 %5.1f   %3.0f%%", id(dht22_temp).state, id(dht22_hum).state);
+      it.printf(0, 26, id(display_font), "DHT11 %5.1f   %3.0f%%", id(dht11_temp).state, id(dht11_hum).state);
+      it.printf(0, 35, id(display_font), "DHT20 %5.1f   %3.0f%%", id(dht20_temp).state, id(dht20_hum).state);
+      it.printf(0, 44, id(display_font), "MCP08 %5.1f", id(mcp9808_temp).state);
+      it.printf(0, 53, id(display_font), "SHT41 %5.1f   %3.0f%%", id(sht41_temp).state, id(sht41_hum).state);
+
+font:
+  - file: "gfonts://Roboto"
+    id: display_font
+    size: 9

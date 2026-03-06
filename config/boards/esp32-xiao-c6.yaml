@@ -11,7 +11,7 @@ esp32_improv:
 i2c:
   sda: GPIO22
   scl: GPIO23
-  scan: False
+  scan: True
 
 sensor:
   - platform: adc
