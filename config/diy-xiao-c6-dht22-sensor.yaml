@@ -12,6 +12,15 @@ packages:
   - !include common/wifi.yaml
   - !include boards/esp32-xiao-c6.yaml
 
+deep_sleep:
+  id: deep_sleep_1
+  sleep_duration: 1min
+
+wifi:
+  on_connect:
+    - delay: 5s
+    - deep_sleep.enter: deep_sleep_1
+
 sensor:
   - platform: dht
     pin:
@@ -25,7 +34,15 @@ sensor:
       name: "Temperature"
     humidity:
       name: "Humidity"
-    update_interval: 60s
+    update_interval: 5s
+  
+  - platform: wifi_signal
+    id: !extend wifi_signal_strength
+    update_interval: never
+  
+  - platform: adc
+    id: !extend battery_voltage
+    update_interval: never
 
 text_sensor:
   - platform: template
@@ -35,7 +52,7 @@ text_sensor:
     entity_category: "diagnostic"
     lambda: |-
       return {"DHT22"};
-    update_interval: 60s
+    update_interval: never
 
   - platform: template
     name: Microcontroller
@@ -44,7 +61,7 @@ text_sensor:
     entity_category: "diagnostic"
     lambda: |-
       return {"ESP32 Xiao C6"};
-    update_interval: 24h
+    update_interval: never
 
 # References
 # https://tutoduino.fr/en/esp32c6-temperature-esphome/
