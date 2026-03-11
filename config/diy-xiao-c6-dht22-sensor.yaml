@@ -6,6 +6,13 @@ esphome:
   name: "${name}"
   name_add_mac_suffix: true
   friendly_name: "${friendly_name}"
+  on_boot:
+    - text_sensor.template.publish:
+        id: temp_sensor_module_model
+        state: "DHT22"
+    - text_sensor.template.publish:
+        id: temp_sensor_mcu_model
+        state: "ESP32 Xiao C6"
 
 packages:
   - !include common/base.yaml
@@ -32,8 +39,10 @@ sensor:
     model: DHT22_TYPE2
     temperature:
       name: "Temperature"
+      force_update: false
     humidity:
       name: "Humidity"
+      force_update: false
     update_interval: 5s
   
   - platform: wifi_signal
@@ -50,8 +59,6 @@ text_sensor:
     id: temp_sensor_module_model
     icon: "mdi:thermometer"
     entity_category: "diagnostic"
-    lambda: |-
-      return {"DHT22"};
     update_interval: never
 
   - platform: template
@@ -59,8 +66,6 @@ text_sensor:
     id: temp_sensor_mcu_model
     icon: "mdi:chip"
     entity_category: "diagnostic"
-    lambda: |-
-      return {"ESP32 Xiao C6"};
     update_interval: never
 
 # References
