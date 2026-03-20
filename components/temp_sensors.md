@@ -34,6 +34,7 @@
 * [DHT22](https://www.amazon.com/dp/B0FK5K45KF) - $7.99 - 3 Pack - 2026-01-26
 * [MCP9808](https://www.adafruit.com/product/1782) - $4.95 - 1 Pack - 2026-02-23
 * [SHT41](https://www.adafruit.com/product/5776) - $5.95 - 1 Pack - 2026-02-23
+* [AHT20 +  BMP280](https://www.aliexpress.us/item/3256805796112622.html?spm=a2g0o.order_list.order_list_main.17.4c721802zD029d&gatewayAdapt=glo2usa) - $1.48 - 1 Pack - 2026-03-08
 
 ## References
 * https://www.makerspace-online.com/temperature-and-humidity-sensor-comparison/
