@@ -7,3 +7,4 @@ https://docs.google.com/spreadsheets/d/13ZaT3M0Kduwyyg-0PB5NsA8wFH66zvUF4Vkch_5C
 
 ## Owned/Purchased
 * [ESP32-C3 Dev Board Mini](https://www.aliexpress.us/item/3256808827955225.html?spm=a2g0o.order_list.order_list_main.11.4c721802zD029d&gatewayAdapt=glo2usa) - $2.13 - 1 Pack - 2026-03-08
+* [XIAO ESP32-C6](https://www.seeedstudio.com/Seeed-StudioXIAO-ESP32C6-3PCS-p-5918.html) - $13.49 - 3 Pack - 2026-02-09
