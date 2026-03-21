@@ -1,0 +1,22 @@
+substitutions:
+  aht20_address: "0x38"
+  aht20_temperature_name: "Temperature"
+  aht20_humidity_name: "Humidity"
+  aht20_update_interval: never
+  aht20_force_update: "false"
+
+sensor:
+  - platform: aht10
+    id: aht20_sensor
+    variant: AHT20
+    address: ${aht20_address}
+    temperature:
+      name: "${aht20_temperature_name}"
+      force_update: ${aht20_force_update}
+    humidity:
+      name: "${aht20_humidity_name}"
+      force_update: ${aht20_force_update}
+    update_interval: ${aht20_update_interval}
+
+# References
+# https://esphome.io/components/sensor/aht10.html

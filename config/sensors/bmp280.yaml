@@ -1,0 +1,21 @@
+substitutions:
+  bmp280_address: "0x77"
+  bmp280_temperature_name: "BMP280 Temperature"
+  bmp280_pressure_name: "Pressure"
+  bmp280_update_interval: never
+  bmp280_force_update: "false"
+
+sensor:
+  - platform: bmp280_i2c
+    id: bmp280_sensor
+    address: ${bmp280_address}
+    temperature:
+      name: "${bmp280_temperature_name}"
+      force_update: ${bmp280_force_update}
+    pressure:
+      name: "${bmp280_pressure_name}"
+      force_update: ${bmp280_force_update}
+    update_interval: ${bmp280_update_interval}
+
+# References
+# https://esphome.io/components/sensor/bmp280.html
