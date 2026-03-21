@@ -1,0 +1,19 @@
+esp32:
+  board: esp32-c3-devkitm-1
+  framework:
+    type: arduino
+
+# 8.5dB was the optimal TX power found during testing.
+wifi:
+  output_power: 8.5dB
+
+i2c:
+  sda: GPIO5
+  scl: GPIO6
+  scan: False
+
+substitutions:
+  controller_model: "Eyewink ESP32-C3 Super Mini"
+
+# References
+# https://www.studiopieters.nl/esp32-c3-super-mini-pinout/

@@ -1,0 +1,55 @@
+# Common deep sleep configuration for battery-powered devices.
+#
+# Provides:
+#  - Adopted flag (persists in NVS) to keep device awake until HA adopts it
+#  - Deep sleep component with configurable durations via substitutions
+#  - WiFi/API reboot timeouts disabled so captive portal stays up
+#  - on_connect logic to allow sleep only after adoption
+#  - on_boot prevent to hold off sleep until WiFi connects
+#  - WiFi signal sensor set to manual update
+#
+# Required substitutions (with defaults):
+#  - sleep_duration: how long to sleep between wake cycles
+#  - run_duration: max awake time (safety net if HA is offline)
+#
+# Device configs must provide their own api: on_client_connected
+# to read sensors and call deep_sleep.enter after adoption.
+
+substitutions:
+  sleep_duration: 5min
+  run_duration: 90s
+
+globals:
+  - id: adopted
+    type: bool
+    restore_value: true
+    initial_value: 'false'
+
+esphome:
+  on_boot:
+    - deep_sleep.prevent: deep_sleep_1
+
+deep_sleep:
+  id: deep_sleep_1
+  run_duration: ${run_duration}
+  sleep_duration: ${sleep_duration}
+
+wifi:
+  reboot_timeout: 0s
+  power_save_mode: none
+  on_connect:
+    - if:
+        condition:
+          and:
+            - wifi.connected:
+            - lambda: 'return id(adopted);'
+        then:
+          - deep_sleep.allow: deep_sleep_1
+
+api:
+  reboot_timeout: 0s
+
+sensor:
+  - platform: wifi_signal
+    id: !extend wifi_signal_strength
+    update_interval: never
