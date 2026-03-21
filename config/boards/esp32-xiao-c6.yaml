@@ -18,6 +18,7 @@ sensor:
     pin: GPIO0
     name: "Battery Voltage"
     id: battery_voltage
+    force_update: false
     # update_interval: never
     attenuation: 12db  # For ADC inputs > 1.1V (extends range to ~2.45V)
     filters:

@@ -10,6 +10,7 @@ sensor:
   - platform: wifi_signal
     name: "Signal WiFi"
     id: wifi_signal_strength
+    force_update: false
     # update_interval: never 
 
 text_sensor:
