@@ -17,8 +17,16 @@ substitutions:
   friendly_name: C3 AHT20 BMP280
   sleep_duration: 1min
 
+output:
+  - platform: gpio
+    pin:
+      number: GPIO8
+      inverted: true
+    id: onboard_led
+
 esphome:
   on_boot:
+    - output.turn_on: onboard_led
     - text_sensor.template.publish:
         id: sensor_module_model
         state: "AHT20+BMP280"
