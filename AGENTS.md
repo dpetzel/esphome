@@ -9,3 +9,7 @@ of the document.
 Do not blindly trust the pin information you have been provided.
 If you are know the supplied configurations can cause issues
 you should alert me to that, in case I made a mistake.
+
+# Hostnames
+ESPHome limits hostnames to no more than 24 characters, so avoid
+generating ones longer than that.

@@ -1,0 +1,91 @@
+# This is a DIY LiPo charger using a XIAO C6
+#
+# Components:
+# - ESP32 Xiao C6
+# - SSD1306 OLED .96" Display
+#
+# Functionality
+# The OLED display is connected to the C6 over I2C.
+# When both the battery and USB-C are connected a charging icon will be displayed
+# When only the battery is connected, a battery icon will be displayed.
+# When the USCB-C is connected, but no battery is connected in icon indicating power but not battery
+#
+# FUTURE
+# Implement the 200K resistor monitoring solution outlined in the Seeed Studios docs
+
+substitutions:
+  name: xiao-c6-lipo-charger
+  friendly_name: Xiao C6 LiPo Charger with OLED
+
+esphome:
+  name: "${name}"
+  name_add_mac_suffix: true
+  friendly_name: "${friendly_name}"
+
+packages:
+  - !include common/base.yaml
+  - !include common/wifi.yaml
+  - !include boards/esp32-xiao-c6.yaml
+
+font:
+  - file: "gfonts://Roboto"
+    id: display_font
+    size: 14
+display:
+  - platform: ssd1306_i2c
+    model: "SSD1306 128x64"
+    address: 0x3C
+    id: oled_display
+    update_interval: 1s
+    lambda: |-
+      float voltage = id(battery_voltage).state;
+      // LiPo: 3.0V = 0%, 4.2V = 100%
+      int pct = (int)((voltage - 3.0) / 1.2 * 100.0);
+      if (pct > 100) pct = 100;
+      if (pct < 0) pct = 0;
+
+      // Draw battery outline: body 30x16, tip 4x8
+      int bx = 2, by = 4, bw = 30, bh = 16;
+      it.rectangle(bx, by, bw, bh);
+      it.filled_rectangle(bx + bw, by + 4, 4, 8);
+
+      // Fill based on percentage
+      int fill_w = (int)((bw - 4) * pct / 100.0);
+      if (fill_w > 0) {
+        it.filled_rectangle(bx + 2, by + 2, fill_w, bh - 4);
+      }
+
+      it.printf(40, 4, id(display_font), "%d%%", pct);
+      it.printf(64, 30, id(display_font), TextAlign::TOP_CENTER, "%.2fV", voltage);
+      int uptime = (int)id(uptime_s).state;
+      int hrs = uptime / 3600;
+      int mins = (uptime % 3600) / 60;
+      int secs = uptime % 60;
+      it.printf(64, 48, id(display_font), TextAlign::TOP_CENTER, "%02d:%02d:%02d", hrs, mins, secs);
+
+sensor:
+  - platform: uptime
+    id: uptime_s
+    internal: true
+    update_interval: 1s
+
+text_sensor:
+  - platform: template
+    name: Microcontroller
+    icon: "mdi:chip"
+    entity_category: "diagnostic"
+    lambda: |-
+      return {"ESP32 Xiao C6"};
+    update_interval: 24h
+
+  - platform: template
+    name: Display Module
+    icon: "mdi:monitor"
+    entity_category: "diagnostic"
+    lambda: |-
+      return {"SSD1306 0.96in OLED"};
+    update_interval: 24h
+
+# References
+# https://wiki.seeedstudio.com/xiao_esp32c6_getting_started/
+# https://esphome.io/components/display/ssd1306

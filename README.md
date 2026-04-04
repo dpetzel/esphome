@@ -27,6 +27,15 @@ My collection of ESPHome configurations
                 <img src="./images/diy-xiao-c6-dht22-sensor/diag.png">
             </td>
         </tr>
+        <tr>
+            <td>xiao-c6-lipo-charger-with-oled</td>
+            <td>DIY LiPo charger status display using XIAO C6 + SSD1306 OLED</td>
+            <td>
+                <a href="./config/xiao-c6-lipo-charger-with-oled.yaml">xiao-c6-lipo-charger-with-oled</a>
+            </td>
+            <td></td>
+            <td></td>
+        </tr>
     </tbody>
 
 </table>
