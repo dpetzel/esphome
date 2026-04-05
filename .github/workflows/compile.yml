@@ -9,14 +9,12 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/esphome/esphome:stable
-      volumes:
-        - ${{ github.workspace }}/config:/config
     steps:
       - uses: actions/checkout@v4
 
       - name: Create dummy secrets
         run: |
-          cat > /config/secrets.yaml << 'EOF'
+          cat > config/secrets.yaml << 'EOF'
           wifi_ssid: "dummy"
           wifi_password: "dummy"
           wifi_fallback_ap_password: "dummy"
@@ -24,4 +22,10 @@ jobs:
           EOF
 
       - name: Compile all configs
-        run: ${{ github.workspace }}/scripts/compile_all.sh
+        run: |
+          for yaml in config/*.yaml; do
+            [ "$yaml" = "config/secrets.yaml" ] && continue
+            name=$(basename "$yaml" .yaml)
+            echo "=== Compiling $name ==="
+            esphome compile "$yaml"
+          done
