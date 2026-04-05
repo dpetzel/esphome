@@ -13,3 +13,6 @@ you should alert me to that, in case I made a mistake.
 # Hostnames
 ESPHome limits hostnames to no more than 24 characters, so avoid
 generating ones longer than that.
+
+# Abbreviations
+* `hass`, `Hass`, `HAAS` should all be read as `Home Assistant`.

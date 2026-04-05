@@ -13,16 +13,17 @@ i2c:
   scl: GPIO23
   scan: True
 
-sensor:
-  - platform: adc
-    pin: GPIO0
-    name: "Battery Voltage"
-    id: battery_voltage
-    # update_interval: never
-    attenuation: 12db  # For ADC inputs > 1.1V (extends range to ~2.45V)
-    filters:
-      - multiply: 2.0  # Voltage divider (div 2) compensation
+output:
+  - platform: gpio
+    pin:
+      number: GPIO15
+      inverted: true
+    id: onboard_led
 
+light:
+  - platform: binary
+    output: onboard_led
+    name: "Onboard LED"
 
 # References
 # https://wiki.seeedstudio.com/xiao_esp32c6_getting_started/
