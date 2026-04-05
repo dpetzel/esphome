@@ -145,7 +145,7 @@ text_sensor:
     update_interval: 24h
 
   - platform: template
-    name: Display Module
+    name: Display
     icon: "mdi:monitor"
     entity_category: "diagnostic"
     lambda: |-

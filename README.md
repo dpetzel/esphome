@@ -9,13 +9,17 @@ My collection of ESPHome configurations
             <td>Name</td>
             <td>Description</td>
             <td>YAML File</td>
+            <td>Controls</td>
             <td>Sensors</td>
+            <td>Configuration</td>
             <td>Diagnostic</td>
         </tr>
     </thead>
     <tbody>
         <tr>
             <td>diy-xiao-c6-dht22-sensor</td>
+            <td></td>
+            <td></td>
             <td></td>
             <td>
                 <a href="./config/diy-xiao-c6-dht22-sensor.yaml">diy-xiao-c6-dht22-sensor</a>
@@ -33,8 +37,18 @@ My collection of ESPHome configurations
             <td>
                 <a href="./config/xiao-c6-lipo-charger-with-oled.yaml">xiao-c6-lipo-charger-with-oled</a>
             </td>
-            <td></td>
-            <td></td>
+            <td>
+                <img src="./images/xiao-c6-lipo-charger-with-oled/controls.png">
+            </td>
+            <td>
+                <img src="./images/xiao-c6-lipo-charger-with-oled/sensors.png">
+            </td>
+            <td>
+                <img src="./images/xiao-c6-lipo-charger-with-oled/configuration.png">
+            </td>
+            <td>
+                <img src="./images/xiao-c6-lipo-charger-with-oled/diagnostic.png">
+            </td>
         </tr>
     </tbody>
 
