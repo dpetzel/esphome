@@ -1,0 +1,27 @@
+name: Compile ESPHome Firmware
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  compile:
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/esphome/esphome:stable
+      volumes:
+        - ${{ github.workspace }}/config:/config
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Create dummy secrets
+        run: |
+          cat > /config/secrets.yaml << 'EOF'
+          wifi_ssid: "dummy"
+          wifi_password: "dummy"
+          wifi_fallback_ap_password: "dummy"
+          home_assistant_api_encryption_key: "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
+          EOF
+
+      - name: Compile all configs
+        run: ${{ github.workspace }}/scripts/compile_all.sh

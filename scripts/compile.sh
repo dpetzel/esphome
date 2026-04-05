@@ -16,16 +16,17 @@ mkdir -p "$OUTPUT_DIR"
 
 echo "=== Compiling $name ==="
 
-if docker compose run --rm -T esphome compile "/config/$(basename "$YAML")"; then
-  firmware=$(find "$CONFIG_DIR/.esphome/build" -path "*/.pioenvs/*/firmware.bin" -newer "$YAML" 2>/dev/null | head -1)
-  if [ -n "$firmware" ]; then
-    cp "$firmware" "$OUTPUT_DIR/${name}-${VERSION}.bin"
-    echo "=== $name: OK -> $OUTPUT_DIR/${name}-${VERSION}.bin ==="
-  else
-    echo "=== $name: compiled but firmware not found ==="
-    exit 1
-  fi
+if command -v esphome &>/dev/null; then
+  esphome compile "$name.yaml"
 else
-  echo "=== $name: FAILED ==="
+  docker run --rm -v "${PWD}/config":/config ghcr.io/esphome/esphome compile "$name.yaml"
+fi
+
+firmware=$(find "$CONFIG_DIR/.esphome/build" -path "*/.pioenvs/*/firmware.bin" -newer "$YAML" 2>/dev/null | head -1)
+if [ -n "$firmware" ]; then
+  cp "$firmware" "$OUTPUT_DIR/${name}-${VERSION}.bin"
+  echo "=== $name: OK -> $OUTPUT_DIR/${name}-${VERSION}.bin ==="
+else
+  echo "=== $name: compiled but firmware not found ==="
   exit 1
 fi
