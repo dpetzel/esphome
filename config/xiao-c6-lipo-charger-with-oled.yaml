@@ -76,7 +76,7 @@ number:
     min_value: 3.5
     max_value: 5.0
     step: 0.01
-    initial_value: 4.25
+    initial_value: 4.21
     restore_value: true
     optimistic: true
     mode: box
