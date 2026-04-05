@@ -5,10 +5,25 @@ on:
     branches: [main]
 
 jobs:
+  list:
+    runs-on: ubuntu-latest
+    outputs:
+      configs: ${{ steps.find.outputs.configs }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: find
+        run: |
+          configs=$(ls config/*.yaml | grep -v secrets | jq -R -s -c 'split("\n") | map(select(. != ""))')
+          echo "configs=$configs" >> "$GITHUB_OUTPUT"
+
   compile:
+    needs: list
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/esphome/esphome:stable
+    strategy:
+      matrix:
+        config: ${{ fromJson(needs.list.outputs.configs) }}
     steps:
       - uses: actions/checkout@v4
 
@@ -21,11 +36,5 @@ jobs:
           home_assistant_api_encryption_key: "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
           EOF
 
-      - name: Compile all configs
-        run: |
-          for yaml in config/*.yaml; do
-            [ "$yaml" = "config/secrets.yaml" ] && continue
-            name=$(basename "$yaml" .yaml)
-            echo "=== Compiling $name ==="
-            esphome compile "$yaml"
-          done
+      - name: Compile
+        run: esphome compile "${{ matrix.config }}"
