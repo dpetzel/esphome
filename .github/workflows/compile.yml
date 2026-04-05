@@ -15,9 +15,9 @@ jobs:
       - name: Create dummy secrets
         run: |
           cat > config/secrets.yaml << 'EOF'
-          wifi_ssid: "dummy"
-          wifi_password: "dummy"
-          wifi_fallback_ap_password: "dummy"
+          wifi_ssid: "dummy-ssid"
+          wifi_password: "dummy-password"
+          wifi_fallback_ap_password: "dummy-password"
           home_assistant_api_encryption_key: "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
           EOF
 
