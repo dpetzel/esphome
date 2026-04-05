@@ -5,3 +5,4 @@
 /config/.esphome/
 /secrets.yaml
 /config/secrets.yaml
+/build/
