@@ -1,0 +1,158 @@
+# This is a DIY LiPo charger using a XIAO C6
+#
+# Components:
+# - ESP32 Xiao C6
+# - SSD1306 OLED .96" Display
+# - 2 100k OHM resistors
+# - 103450 3.7V 2000mAh LiPO Battery
+# - jst PH 2.0mm 2pin plug
+# 
+#
+# Functionality
+# This configuration leverages the XIAO C6's built-in battery management
+# functionality to provide a DIY LiPo battery charger. An OLED screen
+# is used to display the current voltage level and calculates what
+# percentage charge is currently stored. 
+#
+# The current level of the battery will be displayed as a sensor
+# on the device, allowing automations to fire when a charge is
+# complete.
+# 
+
+substitutions:
+  name: xiao-c6-lipo-charger
+  friendly_name: Xiao C6 LiPo Charger with OLED
+
+esphome:
+  name: "${name}"
+  name_add_mac_suffix: true
+  friendly_name: "${friendly_name}"
+
+packages:
+  - !include common/base.yaml
+  - !include common/wifi.yaml
+  - !include boards/esp32-xiao-c6.yaml
+
+font:
+  - file: "gfonts://Roboto"
+    id: display_font
+    size: 14
+display:
+  - platform: ssd1306_i2c
+    model: "SSD1306 128x64"
+    address: 0x3C
+    id: oled_display
+    update_interval: 1s
+    lambda: |-
+      float voltage = id(battery_voltage).state;
+      int pct = (int)round(id(battery_pct).state);
+
+      // Draw battery outline: body 30x16, tip 4x8
+      int bx = 2, by = 4, bw = 30, bh = 16;
+      it.rectangle(bx, by, bw, bh);
+      it.filled_rectangle(bx + bw, by + 4, 4, 8);
+
+      // Fill based on percentage
+      int fill_w = (int)((bw - 4) * pct / 100.0);
+      if (fill_w > 0) {
+        it.filled_rectangle(bx + 2, by + 2, fill_w, bh - 4);
+      }
+
+      it.printf(40, 4, id(display_font), "%d%%", pct);
+      it.printf(64, 30, id(display_font), TextAlign::TOP_CENTER, "%.2fV", voltage);
+      int uptime = (int)id(uptime_s).state;
+      int hrs = uptime / 3600;
+      int mins = (uptime % 3600) / 60;
+      int secs = uptime % 60;
+      it.printf(64, 48, id(display_font), TextAlign::TOP_CENTER, "%02d:%02d:%02d", hrs, mins, secs);
+
+number:
+  - platform: template
+    name: "Max Voltage"
+    id: battery_max_v
+    icon: "mdi:battery-arrow-up"
+    entity_category: config
+    unit_of_measurement: "V"
+    min_value: 3.5
+    max_value: 5.0
+    step: 0.01
+    initial_value: 4.21
+    restore_value: true
+    optimistic: true
+    mode: box
+
+  - platform: template
+    name: "Min Voltage"
+    id: battery_min_v
+    icon: "mdi:battery-arrow-down"
+    entity_category: config
+    unit_of_measurement: "V"
+    min_value: 2.0
+    max_value: 3.5
+    step: 0.01
+    initial_value: 2.75
+    restore_value: true
+    optimistic: true
+    mode: box
+
+sensor:
+  - platform: adc
+    pin: GPIO0
+    name: "Battery Voltage"
+    id: battery_voltage
+    attenuation: 12db
+    filters:
+      - multiply: 2.0
+      - calibrate_linear:
+          - 4.10 -> 4.18
+          - 4.09 -> 4.17
+          - 4.08 -> 4.16
+          - 4.07 -> 4.15
+          - 4.06 -> 4.14
+          - 4.03 -> 4.11
+          - 4.01 -> 4.10
+          - 4.00 -> 4.09
+          - 3.98 -> 4.07
+
+  - platform: uptime
+    id: uptime_s
+    internal: true
+    update_interval: 1s
+
+  - platform: template
+    name: "Battery Percentage"
+    id: battery_pct
+    unit_of_measurement: "%"
+    device_class: battery
+    accuracy_decimals: 0
+    update_interval: 1s
+    lambda: |-
+      float v = id(battery_voltage).state;
+      float mn = id(battery_min_v).state;
+      float mx = id(battery_max_v).state;
+      float pct = (v - mn) / (mx - mn) * 100.0;
+      if (pct > 100) pct = 100;
+      if (pct < 0) pct = 0;
+      return pct;
+
+text_sensor:
+  - platform: template
+    name: Microcontroller
+    icon: "mdi:chip"
+    entity_category: "diagnostic"
+    lambda: |-
+      return {"ESP32 Xiao C6"};
+    update_interval: 24h
+
+  - platform: template
+    name: Display
+    icon: "mdi:monitor"
+    entity_category: "diagnostic"
+    lambda: |-
+      return {"SSD1306 0.96in OLED"};
+    update_interval: 24h
+
+# References
+# https://wiki.seeedstudio.com/xiao_esp32c6_getting_started/
+# https://wiki.seeedstudio.com/xiao_esp32c6_getting_started/#reading-battery-voltage
+# https://esphome.io/components/display/ssd1306
