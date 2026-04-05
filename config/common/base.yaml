@@ -1,3 +1,12 @@
+esphome:
+  name: "${name}"
+  name_add_mac_suffix: true
+  friendly_name: "${friendly_name}"
+  on_boot:
+    - text_sensor.template.publish:
+        id: controller_model
+        state: "${controller_model}"
+
 # Enable Home Assistant API
 api:
 
@@ -7,6 +16,13 @@ logger:
 ota:
   - platform: esphome
 
+text_sensor:
+  - platform: template
+    name: Controller
+    id: controller_model
+    icon: "mdi:chip"
+    entity_category: "diagnostic"
+    update_interval: never
 button:
   - platform: restart
     name: "Restart"

@@ -1,0 +1,67 @@
+#
+# Components:
+#  - ESP32-C3 Super Mini. Refer to components/details/Eyewink-ESP32-C3-Mini.md for more details.
+#  - AHT20+BMP280. Refer to components/details/AliExpress-AHT20+BMP280.md for more details.
+#
+# Pinouts:
+#  AHT20+BMP280 VCC -> 3.3V
+#  AHT20+BMP280 GND -> GND
+#  AHT20+BMP280 SDA -> GPIO5
+#  AHT20+BMP280 SCL -> GPIO6
+#
+# Functionality:
+#  - Optimized for battery usage/power saving
+
+substitutions:
+  name: c3-aht20-bmp280
+  friendly_name: C3 AHT20 BMP280
+  sleep_duration: 1min
+
+output:
+  - platform: gpio
+    pin:
+      number: GPIO8
+      inverted: true
+    id: onboard_led
+
+esphome:
+  on_boot:
+    - output.turn_on: onboard_led
+    - text_sensor.template.publish:
+        id: sensor_module_model
+        state: "AHT20+BMP280"
+
+packages:
+  - !include common/base.yaml
+  - !include common/wifi.yaml
+  - !include common/deep-sleep.yaml
+  - !include boards/Eyewink-esp32-c3-mini.yaml
+  - !include sensors/aht20.yaml
+  - !include sensors/bmp280.yaml
+
+# When HA connects, read sensors and sleep immediately rather than
+# waiting for run_duration to expire. This is the happy path —
+# run_duration is just a safety net for when HA is offline.
+api:
+  on_client_connected:
+    - lambda: |-
+        if (!id(adopted)) {
+          id(adopted) = true;
+        }
+    - component.update: aht20_sensor
+    - component.update: bmp280_sensor
+    - delay: 5s
+    - deep_sleep.enter: deep_sleep_1
+
+text_sensor:
+  - platform: template
+    name: Sensor Module
+    id: sensor_module_model
+    icon: "mdi:thermometer"
+    entity_category: "diagnostic"
+    update_interval: never
+
+# References
+# https://esphome.io/components/sensor/aht10.html
+# https://esphome.io/components/sensor/bmp280.html
+# https://esphome.io/components/deep_sleep.html
