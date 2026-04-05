@@ -62,7 +62,7 @@ The following ESPHome configuration was used for this experiment:
 # - DHT20 temperature sensor
 # - MCP9808 temperature sensor
 # - SHT41 temperature sensor
-# - ESP32 Xiao C6 microcontroller
+# - ESP32 Xiao C6
 #
 # Pinout:
 # All I2C sensors are on their default I2C addresses, 

@@ -137,14 +137,6 @@ sensor:
 
 text_sensor:
   - platform: template
-    name: Microcontroller
-    icon: "mdi:chip"
-    entity_category: "diagnostic"
-    lambda: |-
-      return {"ESP32 Xiao C6"};
-    update_interval: 24h
-
-  - platform: template
     name: Display
     icon: "mdi:monitor"
     entity_category: "diagnostic"

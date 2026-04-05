@@ -37,14 +37,6 @@ text_sensor:
       return {"DHT22"};
     update_interval: 60s
 
-  - platform: template
-    name: Microcontroller
-    id: temp_sensor_mcu_model
-    icon: "mdi:chip"
-    entity_category: "diagnostic"
-    lambda: |-
-      return {"ESP32 Xiao C6"};
-    update_interval: 24h
 
 # References
 # https://tutoduino.fr/en/esp32c6-temperature-esphome/

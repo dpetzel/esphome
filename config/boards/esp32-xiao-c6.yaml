@@ -3,6 +3,9 @@ esp32:
   framework:
     type: esp-idf
 
+substitutions:
+  controller_model: "XIAO ESP32C6"
+
 # Sets up Bluetooth LE (Only on ESP32) to allow the user
 # to provision wifi credentials to the device.
 esp32_improv:
