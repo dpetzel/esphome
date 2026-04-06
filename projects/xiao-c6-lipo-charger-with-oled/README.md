@@ -18,6 +18,7 @@ TLDR - If your looking for a fun project, keep reading. If your looking
 for a quality battery charger, look elsewhere.
 
 ![Project Assembled](./assembled.jpg)
+
 ![Project Assembled](./assembled2.jpg)
 
 ## Bill Of Materials
@@ -85,6 +86,9 @@ Since we have flashed this project using ESPHome we get a number of goodies
 on the device page. Refer to [ESPHome Configuration](/config/xiao-c6-lipo-charger-with-oled.yaml).
 
 ![Project Assembled](/images/xiao-c6-lipo-charger-with-oled/controls.png)
+
 ![Project Assembled](/images/xiao-c6-lipo-charger-with-oled/sensors.png)
+
 ![Project Assembled](/images/xiao-c6-lipo-charger-with-oled/configuration.png)
+
 ![Project Assembled](/images/xiao-c6-lipo-charger-with-oled/diagnostic.png)
