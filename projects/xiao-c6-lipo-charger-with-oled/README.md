@@ -40,6 +40,7 @@ project is to charge ones you already have.
 
 ```mermaid
 graph LR
+
     subgraph Battery
         BAT[103450 LiPo 3.7V 2000mAh]
         JST[JST PH 2.0mm Connector]
@@ -47,13 +48,17 @@ graph LR
     end
 
     subgraph XIAO[XIAO ESP32-C6]
-        BAT_POS[BAT+]
-        BAT_NEG[BAT-]
+        subgraph c6_battery
+            BAT_POS[BAT+]
+            BAT_NEG[BAT-]
+        end
         GPIO0[GPIO0 - ADC]
+        5V
+        GND[GND]
+        3V3[3.3V]
         GPIO22[GPIO22 - SDA]
         GPIO23[GPIO23 - SCL]
-        GND[GND]
-        VCC[3.3V]
+
     end
 
     subgraph Voltage Divider
@@ -61,24 +66,47 @@ graph LR
         R2[R2 - 100kΩ]
     end
 
-    subgraph OLED[SSD1306 0.96in OLED]
+    subgraph OLED
         SDA_PIN[SDA]
         SCL_PIN[SCL]
         OLED_VCC[VCC]
         OLED_GND[GND]
     end
 
-    JST -->|+| BAT_POS
-    JST -->|-| BAT_NEG
-    BAT_POS --> R1
-    R1 --> GPIO0
-    GPIO0 --> R2
-    R2 --> GND
+    BAT_NEG ---|-| RAIL_GND[GND Rail]
+    BAT_POS ---|+| RAIL_POS[PWR Rail]
 
-    GPIO22 --> SDA_PIN
-    GPIO23 --> SCL_PIN
-    VCC --> OLED_VCC
-    GND --> OLED_GND
+    JST ---|+| RAIL_POS
+    JST ---|-| RAIL_GND
+    RAIL_POS --- R1
+    R1 --- GPIO0
+    GPIO0 --- R2
+    R2 --- RAIL_GND
+
+    %% OLED Wiring
+    GPIO22 --- SDA_PIN
+    GPIO23 --- SCL_PIN
+    OLED_VCC --- RAIL_POS
+    OLED_GND --- RAIL_GND
+
+    %% Power Lines
+    linkStyle 2 stroke:red,stroke-width:2px;
+    linkStyle 3 stroke:red,stroke-width:2px;
+    linkStyle 5 stroke:red,stroke-width:2px;
+    linkStyle 11 stroke:red,stroke-width:2px;
+
+    %% GND Lines
+    linkStyle 1 stroke:black,stroke-width:2px;
+    linkStyle 4 stroke:black,stroke-width:2px;
+    linkStyle 8 stroke:black,stroke-width:2px;
+    linkStyle 12 stroke:black,stroke-width:2px;
+
+    %% SDA
+    linkStyle 9 stroke:orange,stroke-width:2px;
+
+    %% SCL
+    linkStyle 10 stroke:blue,stroke-width:2px;
+    
 ```
 
 ## Home Assistant
