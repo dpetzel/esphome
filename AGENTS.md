@@ -5,6 +5,10 @@ components, refer to the files in the components directory. You assume we are
 working with one of the components I have listed in the purchased/owned section
 of the document.
 
+## Board Details
+Within the `components/details/boards` directory we should have one file
+per board model we leverage
+
 # Pinout Verification
 Do not blindly trust the pin information you have been provided.
 If you are know the supplied configurations can cause issues

@@ -1,6 +1,6 @@
 #
 # Components:
-#  - ESP32-C3 Super Mini. Refer to components/details/Eyewink-ESP32-C3-Mini.md for more details.
+#  - ESP32-C3 Super Mini. Refer to components/details/boards/Eyewink-ESP32-C3-Mini.md for more details.
 #  - AHT20+BMP280. Refer to components/details/AliExpress-AHT20+BMP280.md for more details.
 #
 # Pinouts:
