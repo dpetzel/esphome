@@ -7,14 +7,8 @@ esphome:
         id: controller_model
         state: "${controller_model}"
 
-# Enable Home Assistant API
-api:
-
 # Enable logging
 logger:
-
-ota:
-  - platform: esphome
 
 text_sensor:
   - platform: template
@@ -23,10 +17,3 @@ text_sensor:
     icon: "mdi:chip"
     entity_category: "diagnostic"
     update_interval: never
-button:
-  - platform: restart
-    name: "Restart"
-  - platform: safe_mode
-    name: "Safe Mode"
-  - platform: factory_reset
-    name: "Factory Reset"

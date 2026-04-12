@@ -1,3 +1,9 @@
+# Enable Home Assistant API
+api:
+
+ota:
+  - platform: esphome
+
 wifi:
   # Enable fallback hotspot (captive portal) in case wifi connection fails
   ap:
