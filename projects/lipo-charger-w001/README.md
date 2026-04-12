@@ -1,4 +1,4 @@
-# XIAO ESP32C6 Lipo Charger With OLED Display
+# LiPo Charger W001
 ## Overview
 I wanted to explore the built-in battery charging functionality that comes
 on several of the XIAO boards. The project can be used to re-charge a
@@ -111,7 +111,7 @@ graph LR
 
 ## Home Assistant
 Since we have flashed this project using ESPHome we get a number of goodies
-on the device page. Refer to [ESPHome Configuration](/config/xiao-c6-lipo-charger-with-oled.yaml).
+on the device page. Refer to [ESPHome Configuration](/config/lipo-charger-w001.yaml).
 
 ![Project Assembled](/images/xiao-c6-lipo-charger-with-oled/controls.png)
 
