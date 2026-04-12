@@ -10,6 +10,7 @@ esphome:
 packages:
   - !include common/base.yaml
   - !include common/wifi.yaml
+  - !include common/recovery-buttons.yaml
   - !include boards/esp32-xiao-c6.yaml
 
 sensor:

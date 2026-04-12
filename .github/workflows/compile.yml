@@ -3,6 +3,8 @@ name: Compile ESPHome Firmware
 on:
   push:
     branches: [main]
+  pull_request:
+    branches: [main]
 
 jobs:
   list:

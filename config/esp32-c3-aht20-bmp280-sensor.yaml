@@ -34,6 +34,7 @@ esphome:
 packages:
   - !include common/base.yaml
   - !include common/wifi.yaml
+  - !include common/recovery-buttons.yaml
   - !include common/deep-sleep.yaml
   - !include boards/Eyewink-esp32-c3-mini.yaml
   - !include sensors/aht20.yaml
