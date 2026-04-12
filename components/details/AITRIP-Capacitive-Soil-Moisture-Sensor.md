@@ -19,6 +19,10 @@ Capacitive soil moisture sensor that measures moisture levels via changes in cap
 - For use with ESP32 or similar, connect AOUT to an ADC-capable GPIO pin
 - The electronics section (upper portion near connector/IC) is not waterproof — only the sensing area (lower portion) should be buried in soil. Protect the upper area with conformal coating, heat shrink, or tape
 - Approximate output range per community reports: ~1V wet, ~2V dry (varies by unit)
+- https://www.youtube.com/watch?v=IGP38bz-K48 outlines 3 key issues with devices such as this. I checked these boards for all three:
+  - It does have a 662K voltage regulator - https://youtu.be/IGP38bz-K48?t=227
+  - It has the `TL555C` timer chip - https://youtu.be/IGP38bz-K48?t=311
+  - 1M OHM resistor does have continuity with the GRN  - - https://youtu.be/IGP38bz-K48?t=418
 
 ## Costs
 - Purchased on [Amazon](https://www.amazon.com/dp/B094J8XD83) for $11.99 (10-pack)
@@ -28,6 +32,8 @@ Capacitive soil moisture sensor that measures moisture levels via changes in cap
 - 10x Capacitive Soil Moisture Sensor
 - 10x Analog Sensor Cable (PH2.54-3P)
 
+
 ## References
 - [Amazon Product Listing](https://www.amazon.com/dp/B094J8XD83)
 - [ATO.com Capacitive Soil Moisture Sensor](https://www.ato.com/capacitive-soil-moisture-sensor)
+- [Capacitive Soil Moisture Sensors don't work correctly + Fix for v2.0 v1.2 Arduino ESP32 Raspberry Pi](https://youtu.be/IGP38bz-K48)
