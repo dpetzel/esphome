@@ -25,3 +25,7 @@ generating ones longer than that.
 * Avoid ever adding uptime to a common configuration. We have configurations which
   will rely on deep sleep, so these would be meaningless. uptime should be added
   at a more granular level in cases its needed.
+
+# esphome command
+Ensure you have sourced aliash.sh prior to running esphome to ensure things
+get setup correctly.

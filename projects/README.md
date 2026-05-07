@@ -28,3 +28,4 @@ Projects follow the pattern: `<function>-<protocol><number>`
 | Project | Description | Board |
 |---------|-------------|-------|
 | [lipo-charger-w001](lipo-charger-w001/) | LiPo charger with OLED display | XIAO ESP32-C6 |
+| [soil-w001](soil-w001/) | Wireless soil moisture sensor | XIAO ESP32-C6 |

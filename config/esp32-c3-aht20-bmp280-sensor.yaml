@@ -16,6 +16,7 @@ substitutions:
   name: c3-aht20-bmp280
   friendly_name: C3 AHT20 BMP280
   sleep_duration: 1min
+  sleep_prevent_helper_name: prevent_deep_sleep_c3_aht20_bmp280
 
 output:
   - platform: gpio
@@ -52,7 +53,7 @@ api:
     - component.update: aht20_sensor
     - component.update: bmp280_sensor
     - delay: 5s
-    - deep_sleep.enter: deep_sleep_1
+    - script.execute: enter_sleep
 
 text_sensor:
   - platform: template

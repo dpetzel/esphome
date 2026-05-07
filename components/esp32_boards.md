@@ -1,5 +1,11 @@
 # ESP32 Board Information
 
+## XIAO ESP32-C6 Pin Notes
+
+Only 3 ADC-capable pins are available on the breakout headers: GPIO0 (D0),
+GPIO1 (D1), and GPIO2 (D2). All other GPIOs are digital only. Reserve ADC
+pins for analog inputs and use non-ADC pins (D3+) for digital functions
+like power gating, LEDs, and buttons.
 
 ## References
 An ESP32 board comparison lifted from https://www.youtube.com/watch?v=hBBORq_yHrw. 

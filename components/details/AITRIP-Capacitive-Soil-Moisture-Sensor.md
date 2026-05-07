@@ -32,7 +32,6 @@ Capacitive soil moisture sensor that measures moisture levels via changes in cap
 - 10x Capacitive Soil Moisture Sensor
 - 10x Analog Sensor Cable (PH2.54-3P)
 
-
 ## References
 - [Amazon Product Listing](https://www.amazon.com/dp/B094J8XD83)
 - [ATO.com Capacitive Soil Moisture Sensor](https://www.ato.com/capacitive-soil-moisture-sensor)
