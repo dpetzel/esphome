@@ -1,0 +1,154 @@
+# Wireless soil moisture sensor using a capacitive probe.
+#
+# Components:
+#  - XIAO ESP32C6
+#  - AITRIP Capacitive Soil Moisture Sensor
+#  - LiPo Battery Pack
+#  - 2x 100kΩ Resistors
+#
+# Pinout:
+#  Sensor VCC  -> GPIO21 (D3, power gated)
+#  Sensor GND  -> GND
+#  Sensor AOUT -> GPIO1 (D1, ADC)
+#  Battery     -> GPIO0 (D0, ADC via 2x 100kΩ voltage divider)
+#
+# Functionality:
+#  - Reads soil moisture every 60 minutes via deep sleep
+#  - Exposes moisture percentage as a Home Assistant sensor
+
+substitutions:
+  name: soil-w001
+  friendly_name: Soil W001
+  sleep_prevent_helper_name: prevent_deep_sleep_soil_w001
+  sleep_duration: 60min
+
+esphome:
+  on_boot:
+    - text_sensor.template.publish:
+        id: sensor_module_model
+        state: "AITRIP Capacitive Soil Moisture"
+    - output.turn_on: sensor_power
+    - delay: 3s
+    - component.update: soil_moisture_adc
+    - component.update: battery_voltage_adc
+    - delay: 500ms
+    - component.update: battery_pct
+    - component.update: soil_moisture_pct
+    - delay: 500ms
+    - output.turn_off: sensor_power
+
+packages:
+  - !include common/base.yaml
+  - !include common/wifi.yaml
+  - !include common/deep-sleep.yaml
+  - !include boards/esp32-xiao-c6.yaml
+
+api:
+  on_client_connected:
+    - lambda: |-
+        if (!id(adopted)) {
+          id(adopted) = true;
+        }
+    - delay: 5s
+    - script.execute: enter_sleep
+
+output:
+  - platform: gpio
+    pin: GPIO21
+    id: sensor_power
+
+number:
+  - platform: template
+    name: "Dry Voltage"
+    id: dry_voltage
+    icon: "mdi:water-off"
+    entity_category: config
+    unit_of_measurement: "V"
+    min_value: 0.0
+    max_value: 3.3
+    step: 0.01
+    initial_value: 2.75
+    restore_value: true
+    optimistic: true
+    mode: box
+
+  - platform: template
+    name: "Wet Voltage"
+    id: wet_voltage
+    icon: "mdi:water"
+    entity_category: config
+    unit_of_measurement: "V"
+    min_value: 0.0
+    max_value: 3.3
+    step: 0.01
+    initial_value: 1.25
+    restore_value: true
+    optimistic: true
+    mode: box
+
+sensor:
+  - platform: adc
+    pin: GPIO1
+    name: "Soil Moisture Voltage"
+    id: soil_moisture_adc
+    attenuation: 12db
+    unit_of_measurement: "V"
+    accuracy_decimals: 2
+    samples: 16
+    update_interval: never
+
+  - platform: adc
+    pin: GPIO0
+    name: "Battery Voltage"
+    id: battery_voltage_adc
+    attenuation: 12db
+    unit_of_measurement: "V"
+    accuracy_decimals: 2
+    update_interval: never
+    filters:
+      - multiply: 2.0
+
+  - platform: template
+    name: "Battery Percentage"
+    id: battery_pct
+    unit_of_measurement: "%"
+    device_class: battery
+    accuracy_decimals: 0
+    update_interval: never
+    lambda: |-
+      float v = id(battery_voltage_adc).state;
+      float pct = (v - 3.0) / (4.2 - 3.0) * 100.0;
+      if (pct > 100) pct = 100;
+      if (pct < 0) pct = 0;
+      return pct;
+
+  - platform: template
+    name: "Soil Moisture"
+    id: soil_moisture_pct
+    unit_of_measurement: "%"
+    accuracy_decimals: 0
+    update_interval: never
+    lambda: |-
+      float v = id(soil_moisture_adc).state;
+      float dry = id(dry_voltage).state;
+      float wet = id(wet_voltage).state;
+      float pct = (dry - v) / (dry - wet) * 100.0;
+      if (pct > 100) pct = 100;
+      if (pct < 0) pct = 0;
+      return pct;
+
+button:
+  - platform: restart
+    name: "Restart"
+
+text_sensor:
+  - platform: template
+    name: Sensor Module
+    id: sensor_module_model
+    icon: "mdi:water-percent"
+    entity_category: "diagnostic"
+    update_interval: never
+
+# References
+# https://esphome.io/components/sensor/adc.html
+# https://esphome.io/components/deep_sleep.html

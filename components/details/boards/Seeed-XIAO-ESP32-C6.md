@@ -81,3 +81,72 @@ Source: [Seeed Studio Wiki](https://wiki.seeedstudio.com/xiao_esp32c6_getting_st
 * Default SPI: SCK=GPIO19 (D8), MISO=GPIO20 (D9), MOSI=GPIO18 (D10)
 * Deep sleep wake-up GPIOs: 0-7
 * External antenna: Set GPIO3 LOW then GPIO14 HIGH
+
+## Standard Pin Assignments
+
+Standard pin usage across projects for consistency. Deviate only when
+a project has a specific reason to.
+
+| Pin | GPIO | Standard Use |
+|-----|------|--------------|
+| D0 | GPIO0 | Battery voltage monitoring (see [Battery Voltage Monitoring](#battery-voltage-monitoring)) |
+| D1 | GPIO1 | Primary analog sensor input |
+| D2 | GPIO2 | Secondary analog sensor input |
+| D3 | GPIO21 | Sensor power enable (digital on/off for power gating) |
+| D4 | GPIO22 | I2C SDA (board default) |
+| D5 | GPIO23 | I2C SCL (board default) |
+| D6 | GPIO16 | UART TX (board default) |
+| D7 | GPIO17 | UART RX (board default) |
+| D8 | GPIO19 | SPI SCK (board default) |
+| D9 | GPIO20 | SPI MISO (board default) |
+| D10 | GPIO18 | SPI MOSI (board default) |
+
+### Reserved Pins
+* GPIO3 / GPIO14: RF switch control — do not use for general I/O
+* GPIO15: Onboard user LED
+
+## Standard Wire Colors
+
+For use in mermaid.js wiring diagrams to keep projects visually consistent.
+
+| Color | Usage |
+|-------|-------|
+| Red | Power (VCC, 3.3V, 5V, BAT+) |
+| Black | Ground |
+| Green | Analog signal |
+| Orange | I2C SDA |
+| Blue | I2C SCL |
+| Yellow | Digital signal / sensor enable |
+
+## Battery Voltage Monitoring
+
+Per the [Seeed Wiki](https://wiki.seeedstudio.com/xiao_esp32c6_getting_started/#reading-battery-voltage),
+battery voltage is read on GPIO0 (A0) through a 1:2 voltage divider using
+2x 100kΩ resistors. This halves the battery voltage to keep it within the
+ADC's safe input range. The firmware then multiplies the reading by 2 to
+get the actual battery voltage.
+
+### Wiring
+
+1. Connect BAT+ pad to one end of R1 (100kΩ)
+2. Connect the other end of R1 to GPIO0 (D0/A0)
+3. Connect GPIO0 to one end of R2 (100kΩ)
+4. Connect the other end of R2 to GND
+
+```mermaid
+graph TD
+    BAT_POS[BAT+] --- R1[R1 - 100kΩ]
+    R1 --- JUNCTION[Junction]
+    R2[R2 - 100kΩ] --- JUNCTION
+    GPIO0[GPIO0 / A0] --- JUNCTION
+    R2 --- GND[GND]
+
+    linkStyle 0 stroke:red,stroke-width:2px
+    linkStyle 1 stroke:red,stroke-width:2px
+    linkStyle 2 stroke:black,stroke-width:2px
+    linkStyle 3 stroke:green,stroke-width:2px
+    linkStyle 4 stroke:black,stroke-width:2px
+```
+
+On a breadboard: R1, R2, and a jumper to GPIO0 all share the same row.
+R1's other end connects to BAT+. R2's other end connects to GND.

@@ -3,6 +3,7 @@
 # Provides:
 #  - Adopted flag (persists in NVS) to keep device awake until HA adopts it
 #  - Deep sleep component with configurable durations via substitutions
+#  - User-configurable check-in interval via HA number entity
 #  - WiFi/API reboot timeouts disabled so captive portal stays up
 #  - on_connect logic to allow sleep only after adoption
 #  - on_boot prevent to hold off sleep until WiFi connects
@@ -13,7 +14,15 @@
 #  - run_duration: max awake time (safety net if HA is offline)
 #
 # Device configs must provide their own api: on_client_connected
-# to read sensors and call deep_sleep.enter after adoption.
+# to read sensors and call enter_sleep after adoption.
+#
+# Optional HA setup for pausing deep sleep (e.g. for OTA/debugging):
+#  - Create input_boolean.<sleep_prevent_helper_name> helper in HA
+#    (Settings > Devices & Services > Helpers > Toggle)
+#    where sleep_prevent_helper_name is a required substitution
+#    defined in the device config (e.g. prevent_deep_sleep_soil_w001)
+#    Turn ON to keep devices awake, OFF to resume normal sleep.
+#    If the helper does not exist, devices will sleep normally.
 
 substitutions:
   sleep_duration: 5min
@@ -24,6 +33,21 @@ globals:
     type: bool
     restore_value: true
     initial_value: 'false'
+
+number:
+  - platform: template
+    name: "Check-in Interval"
+    id: checkin_interval
+    icon: "mdi:timer-outline"
+    entity_category: config
+    unit_of_measurement: "min"
+    min_value: 0
+    max_value: 999999
+    step: 0.1
+    initial_value: 60
+    restore_value: true
+    optimistic: true
+    mode: box
 
 esphome:
   on_boot:
@@ -53,3 +77,36 @@ sensor:
   - platform: wifi_signal
     id: !extend wifi_signal_strength
     update_interval: never
+
+binary_sensor:
+  - platform: homeassistant
+    id: prevent_deep_sleep
+    name: "Prevent Deep Sleep"
+    entity_id: input_boolean.${sleep_prevent_helper_name}
+    on_release:
+      then:
+        - logger.log: "prevent_deep_sleep turned OFF, entering sleep"
+        - deep_sleep.enter:
+            id: deep_sleep_1
+            sleep_duration: !lambda 'return id(checkin_interval).state * 60 * 1000;'
+
+script:
+  - id: enter_sleep
+    then:
+      - if:
+          condition:
+            binary_sensor.is_on: prevent_deep_sleep
+          then:
+            - deep_sleep.prevent: deep_sleep_1
+            - logger.log: "Skipping sleep, per prevent_deep_sleep"
+          else:
+            - if:
+                condition:
+                  lambda: 'return id(checkin_interval).state == 0;'
+                then:
+                  - deep_sleep.prevent: deep_sleep_1
+                  - logger.log: "Skipping sleep, check-in interval is 0"
+                else:
+                  - deep_sleep.enter:
+                      id: deep_sleep_1
+                      sleep_duration: !lambda 'return id(checkin_interval).state * 60 * 1000;'

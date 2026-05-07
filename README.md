@@ -75,6 +75,10 @@ usbipd bind --busid 2-5
 usbipd attach --wsl --busid  2-5
 ```
 
+Deep Sleep Emergency Recover
+```
+while ! esphome upload soil-w001.yaml --device /dev/ttyACM0; do sleep 1; done
+```
 
 ## References
 * https://esphome.io/components/packages/

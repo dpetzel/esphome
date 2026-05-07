@@ -18,20 +18,17 @@ what you can from the requirements and components. Ask questions when you need c
 information. Do not make up things which are, or could be, untrue.
 
 
-## Project Template
-```markdown
-# <Project Title>
+## Wiring Diagrams
+When implementing a project, generate a `wiring.md` file. Ensure the file
+has both a table of the connections as well as a mermaid.js diagram of
+the wiring. Any time changes are made to the configuration that result
+in a wiring change, make sure these are updated.
 
-## Components
-
-## Requirements
-### Functional
-
-### Non Functional
-
-## Wiring
-```meraid
-TK
-```
-
-```
+## Home Assistant Setup
+If the project uses deep sleep, document the HA helper needed to prevent
+deep sleep for OTA/debugging in the project's `README.md`. Include:
+- The exact helper name (matching the `sleep_prevent_helper_name` substitution)
+- Steps to create it in HA (Settings > Devices & Services > Helpers > Toggle)
+- How to use it (turn ON to keep awake, OFF to resume sleep)
+- Note that turning ON will not wake a sleeping device — the device will
+  stay awake on its next wake cycle
