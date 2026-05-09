@@ -14,6 +14,9 @@ https://docs.google.com/spreadsheets/d/13ZaT3M0Kduwyyg-0PB5NsA8wFH66zvUF4Vkch_5C
 Official Espressif https://products.espressif.com/static/Espressif%20SoC%20Product%20Portfolio.pdf product comparison.
 
 ## Owned/Purchased
+* [XIAO ESP32-C3](https://www.seeedstudio.com/Seeed-Studio-XIAO-ESP32C3-3PCS-p-5917.html) - $12.14 - 3 Pack - 2026-04-18
+* [XIAO ESP32-S3](https://www.seeedstudio.com/Seeed-Studio-XIAO-ESP32S3-3PCS-p-5919.html) - $17.99 - 3 Pack - 2026-04-18
+* [XIAO ESP32-C6](https://www.seeedstudio.com/Seeed-StudioXIAO-ESP32C6-3PCS-p-5918.html) - $13.04 - 3 Pack - 2026-04-18
 * [Eyewink ESP32-C3 Dev Board Mini](https://www.aliexpress.us/item/3256808827955225.html?spm=a2g0o.order_list.order_list_main.11.4c721802zD029d&gatewayAdapt=glo2usa) - $2.13 - 1 Pack - 2026-03-08
 * [XIAO ESP32-C6](https://www.seeedstudio.com/Seeed-StudioXIAO-ESP32C6-3PCS-p-5918.html) - $13.49 - 3 Pack - 2026-02-09
 * [AITRIP ESP32-S](https://www.amazon.com/dp/B0CR5Y2JVD?th=1) - $16.59 - 3 Pack - 2026-02-01
