@@ -2,8 +2,8 @@
 
 ## Board Details
 
-| Board | Manufacturer | SoC | CPU | Clock | SRAM | PSRAM | Flash | Wireless | GPIO | Size |
-|-------|-------------|-----|-----|-------|------|-------|-------|----------|------|------|
+| Board | Manufacturer | SoC | CPU | Clock | SRAM | PSRAM | Flash | Wireless | GPIO QTY | Size |
+|-------|-------------|-----|-----|-------|------|-------|-------|----------|----------|------|
 | [XIAO ESP32-C3](#xiao-esp32-c3) | Seeed Studio | ESP32-C3 | RISC-V single-core | 160 MHz | 400 KB | — | 4 MB | WiFi, BLE 5.0 | 11 | 21×17.5 mm |
 | [XIAO ESP32-S3](#xiao-esp32-s3) | Seeed Studio | ESP32-S3 | Xtensa LX7 dual-core | 240 MHz | 512 KB | 8 MB | 8 MB | WiFi, BLE 5.0 | 11 | 21×17.5 mm |
 | [XIAO ESP32-C6](#xiao-esp32-c6) | Seeed Studio | ESP32-C6 | RISC-V dual-core (160+20 MHz LP) | 160 MHz | 512 KB | — | 4 MB | WiFi 6, BLE 5.3, Zigbee, Thread | 11 | 21×17.5 mm |
